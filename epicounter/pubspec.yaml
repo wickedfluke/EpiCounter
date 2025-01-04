@@ -12,8 +12,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.2
   flutter_localizations:
     sdk: flutter
+  path_provider: ^2.1.5
+  provider: ^6.1.2
+  sqflite: ^2.4.1
 
 dev_dependencies:
   flutter_test:
