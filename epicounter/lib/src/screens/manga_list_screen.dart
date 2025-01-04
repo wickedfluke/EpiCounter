@@ -1,42 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './../providers/anime_provider.dart';
-import 'anime_detail_screen.dart';
-import './../models/anime.dart';
-import 'anime_add_screen.dart'; // Importiamo la schermata di aggiunta
+import './../providers/manga_provider.dart';
+import 'manga_detail_screen.dart';
+import './../models/manga.dart';
+import 'manga_add_screen.dart'; // Importiamo la schermata di aggiunta
 
-class AnimeListScreen extends StatelessWidget {
+class MangaListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Anime List'),
+        title: Text('Manga List'),
         backgroundColor: Colors.black87,
       ),
-      body: Consumer<AnimeProvider>(
-        builder: (context, animeProvider, child) {
+      body: Consumer<MangaProvider>(
+        builder: (context, mangaProvider, child) {
           return GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 0.6,
             ),
-            itemCount: animeProvider.animeList.length,
+            itemCount: mangaProvider.mangaList.length,
             itemBuilder: (context, index) {
-              Anime anime = animeProvider.animeList[index];
+              Manga manga = mangaProvider.mangaList[index];
               return GestureDetector(
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AnimeDetailScreen(anime: anime, index: index),
+                    builder: (context) => MangaDetailScreen(manga: manga, index: index),
                   ),
                 ),
                 child: Card(
                   color: Colors.grey[850],
                   child: Column(
                     children: [
-                      Image.network(anime.imageUrl, fit: BoxFit.cover),
-                      Text(anime.title, style: TextStyle(color: Colors.white)),
-                      Text('${anime.watchedEpisodes}/${anime.totalEpisodes} episodes', style: TextStyle(color: Colors.white)),
+                      Image.network(manga.imageUrl, fit: BoxFit.cover),
+                      Text(manga.title, style: TextStyle(color: Colors.white)),
+                      Text('${manga.readVolumes}/${manga.totalVolumes} volumes', style: TextStyle(color: Colors.white)),
                     ],
                   ),
                 ),
@@ -47,11 +47,11 @@ class AnimeListScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Naviga alla schermata di aggiunta anime
+          // Naviga alla schermata di aggiunta manga
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AnimeAddScreen(),
+              builder: (context) => MangaAddScreen(),
             ),
           );
         },

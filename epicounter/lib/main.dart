@@ -1,36 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './src/providers/anime_provider.dart';
+import './src/providers/manga_provider.dart';
 import './src/screens/anime_list_screen.dart';
+import './src/screens/manga_list_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AnimeProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AnimeProvider()),
+        ChangeNotifierProvider(create: (_) => MangaProvider()),
+      ],
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'EpiCounter',
-        theme: ThemeData(
-          scaffoldBackgroundColor: const Color(0xFF2C2C2C),
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Color(0xFF1F1F1F),
-            foregroundColor: Colors.white,
-          ),
-          textTheme: const TextTheme(
-            bodyMedium: TextStyle(color: Colors.white),
-          ),
-          floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            backgroundColor: Color(0xFFE7B916),
+        title: 'Anime & Manga Tracker',
+        theme: ThemeData.dark().copyWith(
+          appBarTheme: AppBarTheme(color: Colors.black87),
+        ),
+        home: DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: AppBar(
+              title: Text('Anime & Manga Tracker'),
+              bottom: TabBar(
+                tabs: [
+                  Tab(text: 'Anime'),
+                  Tab(text: 'Manga'),
+                ],
+              ),
+            ),
+            body: TabBarView(
+              children: [
+                AnimeListScreen(),
+                MangaListScreen(),
+              ],
+            ),
           ),
         ),
-        home: AnimeListScreen(),
       ),
     );
   }

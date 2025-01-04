@@ -1,65 +1,55 @@
 import 'package:flutter/material.dart';
+import './../models/anime.dart';
+import './../providers/anime_provider.dart';
 import 'package:provider/provider.dart';
-import '../models/anime.dart';
-import '../providers/anime_provider.dart';
-import '../widgets/arc_list_tile.dart';
 
 class AnimeDetailScreen extends StatelessWidget {
   final Anime anime;
+  final int index;
 
-  const AnimeDetailScreen({required this.anime, Key? key}) : super(key: key);
+  AnimeDetailScreen({required this.anime, required this.index});
 
   @override
   Widget build(BuildContext context) {
-    final animeProvider = Provider.of<AnimeProvider>(context);
-
-    final updatedAnime = animeProvider.animes.firstWhere((a) => a.title == anime.title);
-
     return Scaffold(
-      appBar: AppBar(title: Text(updatedAnime.title)),
-      backgroundColor: const Color(0xFF2C2C2C),
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            child: Image.network(
-              updatedAnime.imageUrl,
-              height: 200,
-              fit: BoxFit.cover,
+      appBar: AppBar(
+        title: Text(anime.title),
+        backgroundColor: Colors.black87,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.network(anime.imageUrl),
+            Text(anime.title, style: TextStyle(color: Colors.white, fontSize: 24)),
+            SizedBox(height: 10),
+            Text('Total Episodes: ${anime.totalEpisodes}', style: TextStyle(color: Colors.white)),
+            Text('Watched Episodes: ${anime.watchedEpisodes}', style: TextStyle(color: Colors.white)),
+            Text('Remaining Episodes: ${anime.remainingEpisodes}', style: TextStyle(color: Colors.white)),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Logic to update the anime details
+                  },
+                  child: Text('Edit'),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.yellow[700]),
+                ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    Provider.of<AnimeProvider>(context, listen: false).removeAnime(index);
+                    Navigator.pop(context);
+                  },
+                  child: Text('Delete'),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                ),
+              ],
             ),
-          ),
-          Text(
-            "Episodi: ${updatedAnime.episodesWatched}/${updatedAnime.totalEpisodes}",
-            style: const TextStyle(fontSize: 18, color: Colors.white),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE7B916)),
-                onPressed: () => animeProvider.updateEpisode(updatedAnime.title, 1),
-                child: const Text("+1 Episodio"),
-              ),
-              const SizedBox(width: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFE7B916)),
-                onPressed: () => animeProvider.updateEpisode(updatedAnime.title, -1),
-                child: const Text("-1 Episodio"),
-              ),
-            ],
-          ),
-          updatedAnime.arcs != null
-              ? Expanded(
-                  child: ListView.builder(
-                    itemCount: updatedAnime.arcs!.length,
-                    itemBuilder: (context, index) {
-                      final arc = updatedAnime.arcs![index];
-                      return ArcListTile(arc: arc);
-                    },
-                  ),
-                )
-              : const SizedBox.shrink(),
-        ],
+          ],
+        ),
       ),
     );
   }

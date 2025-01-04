@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import '../models/anime.dart';
+import './../models/anime.dart';
 
-class AnimeProvider extends ChangeNotifier {
-  List<Anime> _animes = [];
+class AnimeProvider with ChangeNotifier {
+  List<Anime> _animeList = [];
 
-  List<Anime> get animes => _animes;
+  List<Anime> get animeList => _animeList;
 
   void addAnime(Anime anime) {
-    _animes.add(anime);
+    _animeList.add(anime);
     notifyListeners();
   }
 
-  void updateEpisode(String title, int increment) {
-    final anime = _animes.firstWhere((anime) => anime.title == title);
-    anime.episodesWatched += increment;
-    if (anime.episodesWatched > anime.totalEpisodes) {
-      anime.episodesWatched = anime.totalEpisodes;
-    } else if (anime.episodesWatched < 0) {
-      anime.episodesWatched = 0;
-    }
+  void updateAnime(int index, Anime updatedAnime) {
+    _animeList[index] = updatedAnime;
+    notifyListeners();
+  }
+
+  void removeAnime(int index) {
+    _animeList.removeAt(index);
     notifyListeners();
   }
 }
