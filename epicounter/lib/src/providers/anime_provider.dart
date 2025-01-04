@@ -20,4 +20,10 @@ class AnimeProvider with ChangeNotifier {
     _animeList.removeAt(index);
     notifyListeners();
   }
+
+  void updateWatchedEpisodes(int index, int newCount) {
+  _animeList[index].watchedEpisodes = newCount;
+  notifyListeners();
+}
+
 }

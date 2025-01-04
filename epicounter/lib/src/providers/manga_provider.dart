@@ -20,4 +20,15 @@ class MangaProvider with ChangeNotifier {
     _mangaList.removeAt(index);
     notifyListeners();
   }
+
+  void updateReadVolumes(int index, int newCount) {
+  _mangaList[index].readVolumes = newCount;
+  notifyListeners();
+}
+
+void updateReadChapters(int index, int newCount) {
+  _mangaList[index].readChapters = newCount;
+  notifyListeners();
+}
+
 }

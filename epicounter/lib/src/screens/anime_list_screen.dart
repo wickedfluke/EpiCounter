@@ -18,11 +18,13 @@ class AnimeListScreen extends StatelessWidget {
           return GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.6,
+              childAspectRatio: 0.7, // Riduciamo l'aspect ratio
             ),
             itemCount: animeProvider.animeList.length,
             itemBuilder: (context, index) {
               Anime anime = animeProvider.animeList[index];
+              int remainingEpisodes = anime.totalEpisodes - anime.watchedEpisodes;
+
               return GestureDetector(
                 onTap: () => Navigator.push(
                   context,
@@ -33,10 +35,44 @@ class AnimeListScreen extends StatelessWidget {
                 child: Card(
                   color: Colors.grey[850],
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.network(anime.imageUrl, fit: BoxFit.cover),
-                      Text(anime.title, style: TextStyle(color: Colors.white)),
-                      Text('${anime.watchedEpisodes}/${anime.totalEpisodes} episodes', style: TextStyle(color: Colors.white)),
+                      // Immagine con dimensioni fisse
+                      Container(
+                        width: double.infinity,
+                        height: 180, // Altezza fissa dell'immagine
+                        child: Image.network(
+                          anime.imageUrl,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      // Testo sotto l'immagine
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              anime.title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              '${anime.watchedEpisodes}/${anime.totalEpisodes} episodes watched',
+                              style: TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                            Text(
+                              '$remainingEpisodes episodes remaining',
+                              style: TextStyle(color: Colors.yellow[700], fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
