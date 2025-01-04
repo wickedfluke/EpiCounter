@@ -3,17 +3,48 @@ import './../models/manga.dart';
 import './../providers/manga_provider.dart';
 import 'package:provider/provider.dart';
 
-class MangaDetailScreen extends StatelessWidget {
+class MangaDetailScreen extends StatefulWidget {
   final Manga manga;
   final int index;
 
   MangaDetailScreen({required this.manga, required this.index});
 
   @override
+  _MangaDetailScreenState createState() => _MangaDetailScreenState();
+}
+
+class _MangaDetailScreenState extends State<MangaDetailScreen> {
+  late int readVolumes;
+  late int readChapters;
+
+  @override
+  void initState() {
+    super.initState();
+    readVolumes = widget.manga.readVolumes;
+    readChapters = widget.manga.readChapters;
+  }
+
+  void updateReadVolumes(int newValue) {
+    setState(() {
+      readVolumes = newValue;
+    });
+    Provider.of<MangaProvider>(context, listen: false)
+        .updateReadVolumes(widget.index, newValue);
+  }
+
+  void updateReadChapters(int newValue) {
+    setState(() {
+      readChapters = newValue;
+    });
+    Provider.of<MangaProvider>(context, listen: false)
+        .updateReadChapters(widget.index, newValue);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(manga.title),
+        title: Text(widget.manga.title),
         backgroundColor: Colors.black87,
       ),
       body: Center(
@@ -23,6 +54,7 @@ class MangaDetailScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              // Immagine
               Container(
                 width: 150,
                 height: 220,
@@ -39,21 +71,21 @@ class MangaDetailScreen extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.network(
-                    manga.imageUrl,
+                    widget.manga.imageUrl,
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               SizedBox(height: 20),
               Text(
-                manga.title,
+                widget.manga.title,
                 style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 10),
               // Volumi
               Text(
-                'Total Volumes: ${manga.totalVolumes}',
+                'Total Volumes: ${widget.manga.totalVolumes}',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               Row(
@@ -61,22 +93,20 @@ class MangaDetailScreen extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      if (manga.readVolumes > 0) {
-                        Provider.of<MangaProvider>(context, listen: false)
-                            .updateReadVolumes(index, manga.readVolumes - 1);
+                      if (readVolumes > 0) {
+                        updateReadVolumes(readVolumes - 1);
                       }
                     },
                     icon: Icon(Icons.remove, color: Colors.red),
                   ),
                   Text(
-                    'Read Volumes: ${manga.readVolumes}',
+                    'Read Volumes: $readVolumes',
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   IconButton(
                     onPressed: () {
-                      if (manga.readVolumes < manga.totalVolumes) {
-                        Provider.of<MangaProvider>(context, listen: false)
-                            .updateReadVolumes(index, manga.readVolumes + 1);
+                      if (readVolumes < widget.manga.totalVolumes) {
+                        updateReadVolumes(readVolumes + 1);
                       }
                     },
                     icon: Icon(Icons.add, color: Colors.green),
@@ -84,13 +114,13 @@ class MangaDetailScreen extends StatelessWidget {
                 ],
               ),
               Text(
-                'Remaining Volumes: ${manga.remainingVolumes}',
+                'Remaining Volumes: ${widget.manga.totalVolumes - readVolumes}',
                 style: TextStyle(color: Colors.yellow[700], fontSize: 16),
               ),
               SizedBox(height: 20),
               // Capitoli
               Text(
-                'Total Chapters: ${manga.totalChapters}',
+                'Total Chapters: ${widget.manga.totalChapters}',
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               Row(
@@ -98,22 +128,20 @@ class MangaDetailScreen extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {
-                      if (manga.readChapters > 0) {
-                        Provider.of<MangaProvider>(context, listen: false)
-                            .updateReadChapters(index, manga.readChapters - 1);
+                      if (readChapters > 0) {
+                        updateReadChapters(readChapters - 1);
                       }
                     },
                     icon: Icon(Icons.remove, color: Colors.red),
                   ),
                   Text(
-                    'Read Chapters: ${manga.readChapters}',
+                    'Read Chapters: $readChapters',
                     style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   IconButton(
                     onPressed: () {
-                      if (manga.readChapters < manga.totalChapters) {
-                        Provider.of<MangaProvider>(context, listen: false)
-                            .updateReadChapters(index, manga.readChapters + 1);
+                      if (readChapters < widget.manga.totalChapters) {
+                        updateReadChapters(readChapters + 1);
                       }
                     },
                     icon: Icon(Icons.add, color: Colors.green),
@@ -121,7 +149,7 @@ class MangaDetailScreen extends StatelessWidget {
                 ],
               ),
               Text(
-                'Remaining Chapters: ${manga.remainingChapters}',
+                'Remaining Chapters: ${widget.manga.totalChapters - readChapters}',
                 style: TextStyle(color: Colors.yellow[700], fontSize: 16),
               ),
               SizedBox(height: 30),
@@ -139,7 +167,7 @@ class MangaDetailScreen extends StatelessWidget {
                   SizedBox(width: 20),
                   ElevatedButton(
                     onPressed: () {
-                      Provider.of<MangaProvider>(context, listen: false).removeManga(index);
+                      Provider.of<MangaProvider>(context, listen: false).removeManga(widget.index);
                       Navigator.pop(context);
                     },
                     child: Text('Delete'),
