@@ -18,4 +18,29 @@ class Manga {
   // Calcola il numero di volumi e capitoli rimanenti
   int get remainingVolumes => totalVolumes - readVolumes;
   int get remainingChapters => totalChapters - readChapters;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'imageUrl': imageUrl,
+      'totalVolumes': totalVolumes,
+      'readVolumes': readVolumes,
+      'remainingVolumes': remainingVolumes,
+      'totalChapters': totalChapters,
+      'readChapters': readChapters,
+      'remainingChapters': remainingChapters,
+    };
+  }
+
+  // Metodo fromJson (opzionale, per deserializzare)
+  factory Manga.fromJson(Map<String, dynamic> json) {
+    return Manga(
+      title: json['title'],
+      imageUrl: json['imageUrl'],
+      totalVolumes: json['totalVolumes'],
+      readVolumes: json['readVolumes'],
+      totalChapters: json['totalChapters'],
+      readChapters: json['readChapters'],
+    );
+  }
 }
