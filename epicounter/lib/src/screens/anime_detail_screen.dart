@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import './../models/anime.dart';
 import './../providers/anime_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:epicounter/src/screens/home_widget.dart'; // Import del widget
+import 'package:epicounter/home_widget_config.dart'; // Import della configurazione
 
 class AnimeDetailScreen extends StatefulWidget {
   final Anime anime;
@@ -20,6 +22,9 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
   void initState() {
     super.initState();
     watchedEpisodes = widget.anime.watchedEpisodes;
+
+    // Aggiorna il widget all'apertura della schermata
+    updateHomeWidget();
   }
 
   void updateWatchedEpisodes(int newValue) {
@@ -28,6 +33,21 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
     });
     Provider.of<AnimeProvider>(context, listen: false)
         .updateWatchedEpisodes(widget.index, newValue);
+
+    // Aggiorna il widget quando cambiano gli episodi guardati
+    updateHomeWidget();
+  }
+
+  void updateHomeWidget() {
+    HomeWidgetConfig.update(
+      context,
+      HomeWidget(
+        title: widget.anime.title,
+        imageUrl: widget.anime.imageUrl,
+        description:
+            'Watched: $watchedEpisodes / ${widget.anime.totalEpisodes}',
+      ),
+    );
   }
 
   @override
@@ -69,7 +89,10 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
               SizedBox(height: 20),
               Text(
                 widget.anime.title,
-                style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 10),
@@ -112,10 +135,11 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // Logic to update the anime details
+                      // Logic to aggiornare i dettagli dell'anime
                     },
                     child: Text('Edit'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.yellow[700]),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow[700]),
                   ),
                   SizedBox(width: 20),
                   ElevatedButton(
@@ -125,7 +149,8 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
                       Navigator.pop(context);
                     },
                     child: Text('Delete'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.red),
                   ),
                 ],
               ),
