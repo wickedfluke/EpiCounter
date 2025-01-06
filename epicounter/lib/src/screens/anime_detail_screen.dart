@@ -50,6 +50,24 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
     );
   }
 
+  void createWidgetForAnime() {
+  // Usa il titolo dell'anime come identificativo univoco
+  // Crea il widget per l'anime
+  HomeWidgetConfig.update(
+    context,
+    HomeWidget(
+      title: widget.anime.title,
+      imageUrl: widget.anime.imageUrl,
+      description: 'Watched: $watchedEpisodes / ${widget.anime.totalEpisodes}',
+    ),
+  ).then((_) {
+    // Quando l'aggiornamento è riuscito, mostra un messaggio
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Il prossimo widget creato sarà di ${widget.anime.title}')),
+    );
+  });
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,11 +153,10 @@ class _AnimeDetailScreenState extends State<AnimeDetailScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // Logic to aggiornare i dettagli dell'anime
+                      createWidgetForAnime();
                     },
-                    child: Text('Edit'),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.yellow[700]),
+                    child: Text('Crea un widget per questo anime'),
+                    style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                   ),
                   SizedBox(width: 20),
                   ElevatedButton(
