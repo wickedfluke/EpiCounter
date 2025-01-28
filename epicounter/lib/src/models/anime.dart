@@ -12,7 +12,7 @@ class Anime {
   });
 
   // Calcola il numero di episodi rimanenti
-  int get remainingEpisodes => totalEpisodes - watchedEpisodes;
+  int get remainingEpisodes => watchedEpisodes + 1;
 
   Map<String, dynamic> toJson() {
     return {

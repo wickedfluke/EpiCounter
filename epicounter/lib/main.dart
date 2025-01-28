@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import './src/providers/anime_provider.dart';
 import './src/providers/manga_provider.dart';
 import './src/screens/anime_list_screen.dart';
-import './src/screens/manga_list_screen.dart';
+// import './src/screens/manga_list_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => MangaProvider()),
       ],
       child: MaterialApp(
-        title: 'Anime & Manga Tracker',
+        title: 'Anime Tracker',
         theme: ThemeData.dark().copyWith(
           appBarTheme: AppBarTheme(color: Colors.black87),
         ),
@@ -26,18 +26,18 @@ class MyApp extends StatelessWidget {
           length: 2,
           child: Scaffold(
             appBar: AppBar(
-              title: Text('Anime & Manga Tracker'),
+              title: Text('Anime Tracker'),
               bottom: TabBar(
                 tabs: [
                   Tab(text: 'Anime'),
-                  Tab(text: 'Manga'),
+                  //Tab(text: 'Manga'),
                 ],
               ),
             ),
             body: TabBarView(
               children: [
                 AnimeListScreen(),
-                MangaListScreen(),
+                // MangaListScreen(),
               ],
             ),
           ),

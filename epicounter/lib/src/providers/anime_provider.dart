@@ -33,4 +33,11 @@ class AnimeProvider with ChangeNotifier {
     await StorageService.saveAnime(_animeList);
     notifyListeners();
   }
+
+  Future<void> reorderAnimeList(int oldIndex, int newIndex) async{
+    final Anime anime = animeList.removeAt(oldIndex);
+    animeList.insert(newIndex, anime);
+    await StorageService.saveAnime(_animeList);
+    notifyListeners();
+  }
 }
